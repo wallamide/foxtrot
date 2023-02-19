@@ -51,6 +51,7 @@ chrono = "0.4.23"
 glob = "0.3.1"
 polyanya = "0.2.0"
 bevy_pathmesh = "0.3.0"
+leafwing-input-manager ={ version = "0.8", path = "../leafwing-input-manager"}
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.27", default-features = false }

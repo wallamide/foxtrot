@@ -1,5 +1,7 @@
-use bevy::prelude::{Input, Res, ScanCode};
+use bevy::prelude::{Input, Res};
+use leafwing_input_manager::{Actionlike, scan_codes::QwertyScanCode};
 
+#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum GameControl {
     Up,
     Down,
@@ -15,7 +17,7 @@ macro_rules! generate_bindings {
     ( $( $game_control:pat => $key_codes:expr, )+ ) => {
         impl GameControl {
             #[allow(dead_code)]
-            pub fn just_released(&self, keyboard_input: &Res<Input<ScanCode>>) -> bool {
+            pub fn just_released(&self, keyboard_input: &Res<Input<QwertyScanCode>>) -> bool {
                 match self {
                     $ (
                         $game_control => keyboard_input.any_just_released($key_codes),
@@ -24,7 +26,7 @@ macro_rules! generate_bindings {
             }
 
             #[allow(dead_code)]
-            pub fn just_pressed(&self, keyboard_input: &Res<Input<ScanCode>>) -> bool {
+            pub fn just_pressed(&self, keyboard_input: &Res<Input<QwertyScanCode>>) -> bool {
                 match self {
                     $ (
                         $game_control => keyboard_input.any_just_pressed($key_codes),
@@ -32,7 +34,7 @@ macro_rules! generate_bindings {
                 }
             }
 
-            pub fn pressed(&self, keyboard_input: &Res<Input<ScanCode>>) -> bool {
+            pub fn pressed(&self, keyboard_input: &Res<Input<QwertyScanCode>>) -> bool {
                 match self {
                     $ (
                         $game_control => keyboard_input.any_pressed($key_codes),
@@ -46,7 +48,7 @@ macro_rules! generate_bindings {
     };
 }
 
-pub fn get_movement(control: GameControl, input: &Res<Input<ScanCode>>) -> f32 {
+pub fn get_movement(control: GameControl, input: &Res<Input<QwertyScanCode>>) -> f32 {
     if control.pressed(input) {
         1.0
     } else {
@@ -60,90 +62,42 @@ pub fn get_movement(control: GameControl, input: &Res<Input<ScanCode>>) -> f32 {
 generate_bindings! {
     GameControl::Up => [
          // W
-        ScanCode(
-            #[cfg(target_os = "macos")] 13,
-            #[cfg(target_os = "windows")] 0x11,
-            #[cfg(target_os = "linux")] 0x11,
-        ),
+        QwertyScanCode::W,
         // Up arrow
-        ScanCode(
-            #[cfg(target_os = "macos")] 126,
-            #[cfg(target_os = "windows")] 0x48,
-            #[cfg(target_os = "linux")] 0x48,
-        ),
+        QwertyScanCode::Up,
     ],
     GameControl::Down => [
         // S
-        ScanCode(
-            #[cfg(target_os = "macos")] 1,
-            #[cfg(target_os = "windows")] 0x1F,
-            #[cfg(target_os = "linux")] 0x1F,
-        ),
+        QwertyScanCode::S,
         // Down arrow
-        ScanCode(
-            #[cfg(target_os = "macos")] 125,
-            #[cfg(target_os = "windows")] 0x50,
-            #[cfg(target_os = "linux")] 0x50,
-        ),
+        QwertyScanCode::Down,
     ],
     GameControl::Left => [
         // A
-        ScanCode(
-            #[cfg(target_os = "macos")] 0,
-            #[cfg(target_os = "windows")] 0x1E,
-            #[cfg(target_os = "linux")] 0x1E,
-        ),
+        QwertyScanCode::A,
         // Left arrow
-        ScanCode(
-            #[cfg(target_os = "macos")] 123,
-            #[cfg(target_os = "windows")] 0x4B,
-            #[cfg(target_os = "linux")] 0x4B,
-        ),
+        QwertyScanCode::Left,
     ],
     GameControl::Right => [
         // D
-        ScanCode(
-            #[cfg(target_os = "macos")] 2,
-            #[cfg(target_os = "windows")] 0x20,
-            #[cfg(target_os = "linux")] 0x20,
-        ),
+        QwertyScanCode::D,
         // Right arrow
-        ScanCode(
-            #[cfg(target_os = "macos")] 124,
-            #[cfg(target_os = "windows")] 0x4D,
-            #[cfg(target_os = "linux")] 0x4D,
-        ),
+        QwertyScanCode::Right,
     ],
     GameControl::Sprint => [
         // Left shift
-        ScanCode(
-            #[cfg(target_os = "macos")] 56,
-            #[cfg(target_os = "windows")] 0x2A,
-            #[cfg(target_os = "linux")] 0x2A,
-        ),
+        QwertyScanCode::LShift,
     ],
     GameControl::Jump => [
         // Space
-        ScanCode(
-            #[cfg(target_os = "macos")] 49,
-            #[cfg(target_os = "windows")] 0x39,
-            #[cfg(target_os = "linux")] 0x39,
-        ),
+        QwertyScanCode::Space
     ],
     GameControl::ToggleEditor => [
         // Q
-        ScanCode(
-            #[cfg(target_os = "macos")] 12,
-            #[cfg(target_os = "windows")] 0x10,
-            #[cfg(target_os = "linux")] 0x10,
-        ),
+        QwertyScanCode::Q,
     ],
     GameControl::Interact => [
         // E
-        ScanCode(
-            #[cfg(target_os = "macos")] 14,
-            #[cfg(target_os = "windows")] 0x12,
-            #[cfg(target_os = "linux")] 0x12,
-        ),
+        QwertyScanCode::E,
     ],
 }
